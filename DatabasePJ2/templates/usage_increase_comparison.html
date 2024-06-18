@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Usage Comparison</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
+    <style>
+        /* Adjust the size of the canvas here */
+        #userIncreaseHistogram {
+            max-width: 600px; /* Maintain the width */
+            height: 400px; /* Increase the height */
+            margin: 0 auto; /* Center the canvas */
+        }
+    </style>
+</head>
+<body>
+    <h1>Energy Usage Comparison</h1>
+
+    <h2>Your Service Locations' Energy Consumption Increase</h2>
+    {% if user_increase %}
+        <table>
+            <tr>
+                <th>Location Address</th>
+                <th>Percentage Increase</th>
+            </tr>
+            {% for location in user_increase %}
+                <tr>
+                    <td>{{ location.address }}</td>
+                    <td>{{ location.PercentageIncrease }}%</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No data available for your locations.</p>
+    {% endif %}
+
+    <h2>Highest Percentage Increase Across All Locations</h2>
+    {% if highest_increase %}
+        <p>Percentage Increase: {{ highest_increase.MaxPercentageIncrease }}%</p>
+    {% else %}
+        <p>No data available.</p>
+    {% endif %}
+
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+
+    <!-- Histogram at the bottom -->
+    {% if user_increase %}
+        <h2>Energy Consumption Increase Histogram</h2>
+        <canvas id="userIncreaseHistogram"></canvas>
+
+        <script>
+            let labels = {{ user_increase | map(attribute='address') | list | tojson }};
+            let data = {{ user_increase | map(attribute='PercentageIncrease') | list | tojson }};
+
+            // Add the highest increase data
+            {% if highest_increase %}
+                labels.push('Highest Increase Across All Locations');
+                data.push({{ highest_increase.MaxPercentageIncrease }});
+            {% endif %}
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const ctx = document.getElementById('userIncreaseHistogram').getContext('2d');
+                const userIncreaseChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Percentage Increase',
+                            data: data,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+    {% endif %}
+</body>
+</html>

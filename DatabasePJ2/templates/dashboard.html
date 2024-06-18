@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">Welcome to Your Smart Home Energy Management System!</h1>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Navigation -->
+        <nav class="dashboard-nav">
+            <ul class="nav-list">
+                <li><a href="{{ url_for('add_location') }}">Add Location</a></li>
+                <li><a href="{{ url_for('my_locations') }}">My Locations</a></li>
+                <li><a href="{{ url_for('add_device') }}">Register New Device</a></li>
+                <li><a href="{{ url_for('my_devices') }}">My Devices</a></li>
+                <li><a href="{{ url_for('energy_consumption') }}">Daily Energy Consumption</a></li>
+                <li><a href="{{ url_for('energy_per_device') }}">Device Energy Consumption</a></li>
+                <li><a href="{{ url_for('compare_with_similar_locations') }}">Compare with Similar Locations</a></li>
+                <li><a href="{{ url_for('abnormal_events') }}">Abnormal Events</a></li>
+                <li><a href="{{ url_for('usage_increase_comparison') }}">Energy Usage Increase</a></li>
+                <li><a href="{{ url_for('device_energy_cost') }}">Potential Savings</a></li>
+            </ul>
+        </nav>
+
+        <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Energy Consumption</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Energy Consumption</h1>
+
+    <!-- Date selection form -->
+    <form action="{{ url_for('energy_consumption') }}" method="get">
+        <label for="start">Start Date:</label>
+        <input type="date" id="start" name="start" value="{{ start_date }}">
+        <label for="end">End Date:</label>
+        <input type="date" id="end" name="end" value="{{ end_date }}">
+        <button type="submit">Show Consumption</button>
+    </form>
+
+    <!-- Chart Canvas -->
+    <canvas id="energyChart"></canvas>
+
+    <script>
+        // Directly assign Flask variables to JavaScript
+        var dates = {{ dates }};
+        var usages = {{ usages }};
+
+        // Chart.js line chart
+        var ctx = document.getElementById('energyChart').getContext('2d');
+        var energyChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Daily Energy Usage (kWh)',
+                    data: usages,
+                     borderColor: 'rgba(0, 123, 255, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+</body>
+</html>

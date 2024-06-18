@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Register</h2>
+        <form method="post" action="{{ url_for('register') }}">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="text" name="fName" placeholder="Customer first name" required>
+            <input type="text" name="lName" placeholder="Customer last name" required>
+            <input type="text" name="b_addr" placeholder="Billing address" required>
+            <input type="text" name="b_zcode" placeholder="Billing zip code" required>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</body>
+</html>

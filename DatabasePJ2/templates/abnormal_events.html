@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Abnormal Events</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>Refrigerator Door Left Open</h1>
+
+    <form method="GET" action="{{ url_for('abnormal_events') }}">
+        <label for="start">Start Date:</label>
+        <input type="date" id="start" name="start" value="{{ start_date }}">
+
+        <label for="end">End Date:</label>
+        <input type="date" id="end" name="end" value="{{ end_date }}">
+
+        <button type="submit">Filter</button>
+    </form>
+
+    {% if events %}
+        <table>
+            <tr>
+                <!-- th>Location ID</th -->
+                <th>Service Location</th>
+                <!-- th>Device ID</th -->
+                <th>Refrigerator Model</th>
+                <th>Door Opened Time</th>
+                <th>Door Closed Time</th>
+            </tr>
+            {% for event in events %}
+                <tr>
+                    <!-- td>{{ event.LocationID }}</td -->
+                    <td>{{ event.ServiceLocation }}</td>
+                    <!-- td>{{ event.DeviceID }}</td -->
+                    <td>{{ event.RefrigeratorModel }}</td>
+                    <td>{{ event.DoorOpenedTime }}</td>
+                    <td>{{ event.DoorClosedTime }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No abnormal events found for the selected dates.</p>
+    {% endif %}
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+</body>
+</html>

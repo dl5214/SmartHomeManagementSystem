@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Device</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script>
+        function updateDeviceModels() {
+            var dtype = document.getElementById("dtype").value;
+            var dmodelSelect = document.getElementById("dmodel");
+            dmodelSelect.innerHTML = '';  // Clear existing options
+
+            // Define device models based on type (fetched from the server)
+            var models = {
+                'refrigerator': ['Siemens R45 Refrigerator', 'Mitsubishi EC70 Refrigerator', 'Bosch 800 Refrigerator', 'Samsung Model X'],
+                'AC system': ['Toshiba K500 AC', 'Hitachi G30 AC', 'GE 4500 Air Conditioner', 'LG AC Model Y'],
+                'dryer': ['Whirlpool Dryer Model Z', 'Siemens Dryer A'],
+                'light': ['Phillipes E50 Light', 'Osram H7 Light']
+            };
+
+            if (models[dtype]) {
+                models[dtype].forEach(function(model) {
+                    var option = document.createElement('option');
+                    option.value = model;
+                    option.text = model;
+                    dmodelSelect.appendChild(option);
+                });
+            }
+        }
+    </script>
+</head>
+
+
+<body>
+    <div class="form-container">
+        <form action="{{ url_for('add_device') }}" method="post">
+            <h2>Register New Device</h2>
+            <label for="lid">Location:</label>
+            <select id="lid" name="lid">
+                {% for loc in locations %}
+                    <option value="{{ loc[0] }}">{{ loc[1] }}</option>
+                {% endfor %}
+            </select><br><br>
+
+            <label for="dtype">Device Type:</label>
+            <select id="dtype" name="dtype" onchange="updateDeviceModels()">
+                <option value="refrigerator">Refrigerator</option>
+                <option value="AC system">AC System</option>
+                <option value="dryer">Dryer</option>
+                <option value="light">Light</option>
+                <!-- Add other device types here -->
+            </select><br><br>
+
+            <label for="dmodel">Device Model:</label>
+            <select id="dmodel" name="dmodel">
+                <!-- Device models will be populated based on type selection -->
+            </select><br><br>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description"></textarea><br><br>
+
+            <button type="submit">Register Device</button>
+        </form>
+        <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+    </div>
+    <script>updateDeviceModels(); // Initial call to populate models</script>
+</body>
+</html>

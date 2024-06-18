@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Compare with Similar Locations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>Compare Energy Consumption with Similar Locations</h1>
+
+    <!-- Form for selecting criteria -->
+    <form action="{{ url_for('compare_with_similar_locations') }}" method="post">
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date" required>
+
+        <label for="end_date">End Date:</label>
+        <input type="date" id="end_date" name="end_date" required>
+
+        <label for="area_percentage">Area Range Percentage (±%):</label>
+        <input type="number" id="area_percentage" name="area_percentage" min="1" max="100" required>
+
+        <button type="submit">Compare</button>
+    </form>
+
+    <!-- Display the comparison results -->
+    {% if comparison_data %}
+        <h2>Comparison Results</h2>
+        <table>
+            <tr>
+                <!-- th>Location ID</th -->
+                <th>Address</th>
+                <th>Area</th>
+                <th>Your Energy Usage</th>
+                <th>Average Energy Usage</th>
+                <th>Usage Percentage</th>
+            </tr>
+            {% for row in comparison_data %}
+                <tr>
+                    <!-- td>{{ row.lid }}</td -->
+                    <td>{{ row.address }}</td>
+                    <td>{{ row.area }}</td>
+                    <td>{{ row.loc_eu }}</td>
+                    <td>{{ row.avg_eu }}</td>
+                    <td>{{ row.UsagePercentage }}%</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No data available. Please select a date range and area percentage to compare.</p>
+    {% endif %}
+
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+</body>
+</html>
+

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Device Energy Cost</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Device Energy Cost</h1>
+    <table>
+        <tr>
+            <th>Location Address</th>
+            <th>Device Model</th>
+            <th>Total Cost ($)</th>
+            <th>If Minimized ($)</th>
+        </tr>
+        {% for device in device_costs %}
+        <tr>
+            <td>{{ device.address }}</td>
+            <td>{{ device.dmodel }}</td>
+            <td>{{ device.TotalCost }}</td>
+            <td>{{ device.PotentialSavings }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+
+    <!-- Canvas for Chart.js Chart -->
+    <div style="width: 60%; margin: auto;">
+        <canvas id="energyCostChart"></canvas>
+    </div>
+
+    <script>
+        var ctx = document.getElementById('energyCostChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ labels|tojson }},
+                datasets: [{
+                    label: 'Total Cost ($)',
+                    data: {{ total_costs|tojson }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'If Minimized ($)',
+                    data: {{ potential_savings|tojson }},
+                    backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+</body>
+</html>

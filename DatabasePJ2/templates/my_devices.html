@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Devices</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script>
+        function confirmDeactivation(did) {
+            if (confirm("Delete this device (cannot be revoked)?")) {
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/deactivate_device/' + did;
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>My Devices</h2>
+    {% if devices %}
+        <table class="table">
+            <tr>
+                <th>Location Address</th>
+                <th>Type</th>
+                <th>Model</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
+            {% for device in devices %}
+                <tr>
+                    <td>{{ device[1] }}</td>
+                    <td>{{ device[2] }}</td>
+                    <td>{{ device[3] }}</td>
+                    <td>{{ device[4] }}</td>
+                    <td>
+                        <button type="button" class="action-btn" onclick="confirmDeactivation({{ device[0] }})">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No devices found.</p>
+    {% endif %}
+    <a href="{{ url_for('dashboard') }}" class="back-link">Back to Dashboard</a>
+</body>
+</html>
